@@ -31,8 +31,10 @@ fun GameScreen(){
      var playerX by remember { mutableStateOf(0f) }
      var playerY by remember { mutableStateOf(0f) }
      var playerInitialized by remember { mutableStateOf(false) }
+     var screenWidth by remember { mutableStateOf(0f) }
         Canvas(modifier = Modifier.fillMaxSize()
             .onSizeChanged{ size ->
+                screenWidth = size.width.toFloat()
                 if (!playerInitialized){
                     playerX = size.width / 2f
                     playerY = size.height - 120f
@@ -42,8 +44,10 @@ fun GameScreen(){
             .pointerInput(Unit){detectDragGestures(
                 onDrag = { change, dragAmount ->
                     change.consume()
-                    // val dragX = dragAmount.x
-                    playerX += dragAmount.x
+                    val shipWidth = 80f
+                    playerX =( playerX + dragAmount.x)
+                        .coerceIn(shipWidth/2
+                        , screenWidth - shipWidth/2)
                 }
             )}){
             drawRect(color = Color.Black)
